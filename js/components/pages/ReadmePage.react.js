@@ -11,18 +11,13 @@ export default class ReadmePage extends Component {
   render() {
     return (
       <div>
-        <h2>Further Setup</h2>
-        <p>Assuming you have already cloned the repo and ran all the commands from the README (otherwise you would not be here), these are the further steps:</p>
+        <h2>About the application <small>Get The Train</small></h2>
+        <p>Get The Train is an offline-first application that allows users to select a departure and arrival train station,
+          and see a list of trains, times, and durations. A default train schedule will be provided that should be
+          used when the application is offline. If a network connection exists, the application will query
+          an endpoint that provides information about all arrival and departure times.</p>
 
-        <ol>
-          <li>Replace my name and the package name in the package.json file</li>
-          <li>Replace the two components with your first component</li>
-          <li>Replace the default actions with your first action</li>
-          <li>Delete css/components/_home.css and add the styling for your component</li>
-          <li>And finally, update the unit tests</li>
-        </ol>
-
-        <Link className="btn" to="/">Home</Link>
+        <Link className="btn btn-primary" to="/">&larr; Go back to the app</Link>
       </div>
     );
   }

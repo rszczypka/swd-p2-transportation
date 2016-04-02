@@ -83,9 +83,27 @@ module.exports = function(options) {
           test:   /\.css$/, // Transform all .css files required somewhere within an entry point...
           loader: cssLoaders // ...with PostCSS
         }, {
+        test: /\.scss$/,
+        loaders: ['style', 'css', 'sass']
+        }, {
           test: /\.jpe?g$|\.gif$|\.png$/i,
           loader: "url-loader?limit=10000"
-        }
+        }, {
+        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url?limit=10000&mimetype=application/font-woff"
+      }, {
+        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url?limit=10000&mimetype=application/font-woff"
+      }, {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url?limit=10000&mimetype=application/octet-stream"
+      }, {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "file"
+      }, {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url?limit=10000&mimetype=image/svg+xml"
+      }
       ]
     },
     plugins: plugins,
@@ -102,6 +120,11 @@ module.exports = function(options) {
         require('autoprefixer')({ // ...and add vendor prefixes...
           browsers: ['last 2 versions', 'IE > 8'] // ...supporting the last 2 major browser versions and IE 8 and up...
         }),
+        require('postcss-hexrgba')(),
+        require('postcss-assets')({
+          loadPaths: ['img/'],
+          cachebuster: true
+        }), // ...resolve images, fonts, etc...
         require('postcss-reporter')({ // This plugin makes sure we get warnings in the console
           clearMessages: true
         })

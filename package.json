@@ -1,16 +1,20 @@
 {
-  "name": "reactjs-boilerplate",
-  "version": "2.4.0",
-  "description": "Quick setup for new React.js applications featuring Redux, hot–reloading, PostCSS, react-router and Mocha.",
+  "name": "swd-p2-transportation",
+  "version": "0.0.1",
+  "description": "Offline first public transportation app",
   "dependencies": {
+    "bootstrap-loader": "^1.0.10",
+    "font-awesome": "^4.5.0",
     "fontfaceobserver": "^1.5.1",
     "history": "1.17.0",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
     "react-redux": "^4.0.0",
     "react-router": "^1.0.3",
+    "react-widgets": "^3.2.1",
     "redux": "^3.0.0",
-    "redux-thunk": "^1.0.0"
+    "redux-thunk": "^1.0.0",
+    "url-loader": "^0.5.7"
   },
   "devDependencies": {
     "appcache-webpack-plugin": "^1.2.0",
@@ -27,8 +31,9 @@
     "babel-preset-react": "^6.0.0",
     "babel-preset-react-hmre": "1.0.1",
     "babel-preset-stage-2": "^6.0.0",
+    "bootstrap-sass": "^3.3.6",
     "cross-env": "1.0.6",
-    "css-loader": "^0.23.0",
+    "css-loader": "^0.23.1",
     "cssnano": "^3.0.1",
     "eslint": "^1.4.1",
     "eslint-config-airbnb": "1.0.0",
@@ -40,21 +45,26 @@
     "ip": "1.1.0",
     "json-loader": "^0.5.2",
     "mocha": "^2.3.2",
+    "node-sass": "^3.4.2",
     "object.assign": "^4.0.1",
+    "postcss-assets": "^4.0.1",
     "postcss-focus": "^1.0.0",
+    "postcss-hexrgba": "^0.2.0",
     "postcss-import": "^7.0.0",
     "postcss-loader": "^0.8.0",
     "postcss-reporter": "^1.2.1",
     "postcss-simple-vars": "^1.0.0",
     "react-transform-hmr": "^1.0.1",
-    "style-loader": "^0.13.0",
-    "url-loader": "^0.5.6",
+    "resolve-url-loader": "^1.4.3",
+    "sass-loader": "^3.2.0",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.11.0"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/mxstbr/react-boilerplate.git"
+    "url": "https://github.com/rszczypka/swd-p2-transportation.git"
   },
   "scripts": {
     "lint": "eslint .",
@@ -64,6 +74,10 @@
     "build": "npm run test && cross-env NODE_ENV=production webpack --config webpack.prod.config.js --progress --colors -p",
     "serve": "cross-env NODE_ENV=production node server.prod.js"
   },
-  "author": "Max Stoiber",
-  "license": "MIT"
+  "author": "Rafal Szczypka",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rszczypka/swd-p2-transportation/issues"
+  },
+  "homepage": "https://github.com/rszczypka/swd-p2-transportation#readme"
 }

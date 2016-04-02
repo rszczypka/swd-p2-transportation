@@ -1,24 +1,12 @@
-# React.js Boilerplate
+# Project 2: Public Transportation App
+## Udacity - Senior Web Developer Nanodegree
 
-[![Dependency Status][dep-status-img]][dep-status-link] [![devDependency Status][dev-dep-status-img]][dev-dep-status-link] [![Build Status][ci-img]][ci] [![Join the chat at https://gitter.im/mxstbr/react-boilerplate](https://badges.gitter.im/mxstbr/react-boilerplate.svg)](https://gitter.im/mxstbr/react-boilerplate?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+Get The Train is an offline-first application that allows users to select a departure and arrival train station, 
+and see a list of trains, times, and durations. A default train schedule will be provided that should be 
+used when the application is offline. If a network connection exists, the application will query 
+an endpoint that provides information about all arrival and departure times.
 
-Quick setup for new performance orientated, offline–first React.js applications featuring Redux, hot–reloading, PostCSS, react-router, ServiceWorker, AppCache, FontFaceObserver and Mocha.
-
-Made with :heart: by [Max Stoiber](https://twitter.com/mxstbr)!
-
-[dep-status-img]: https://david-dm.org/mxstbr/react-boilerplate.svg
-[dep-status-link]: https://david-dm.org/mxstbr/react-boilerplate
-[dev-dep-status-img]: https://david-dm.org/mxstbr/react-boilerplate/dev-status.svg
-[dev-dep-status-link]: https://david-dm.org/mxstbr/react-boilerplate#info=devDependencies
-[ci-img]: https://travis-ci.org/mxstbr/react-boilerplate.svg?branch=master
-[ci]: https://travis-ci.org/mxstbr/react-boilerplate
-
------
-
-Version 3.0 is actively being developed on the [v3.0.0 branch], please check it out and leave feedback!
-(PRs on `master` are not going to be merged.)
-
-[v3.0.0 branch]: https://github.com/mxstbr/react-boilerplate/tree/v3.0.0
+A solid starting point achieved with react-boilerplate: (https://github.com/mxstbr/react-boilerplate)
 
 ## Features
 
@@ -38,17 +26,13 @@ Version 3.0 is actively being developed on the [v3.0.0 branch], please check it 
 
 ## Getting started
 
-1. Clone this repo using `git clone https://github.com/mxstbr/react-boilerplate.git`.
+1. Clone this repo using `git clone https://github.com/rszczypka/swd-p2-transportation.git`.
 
-2. Delete the existing git repository by running `rm -rf .git`.
+2. Run `npm install` to install the dependencies.
 
-3. Initialize a new git repository with `git init`, `git add .` and `git commit -m "Initial commit"`.
+3. Run `npm start` to start the local web server.
 
-4. Run `npm install` to install the dependencies.
-
-5. Run `npm start` to start the local web server.
-
-6. Go to `http://localhost:3000` and you should see the app running!
+4. Go to `http://localhost:3000` and you should see the app running!
 
 ## Building & Deploying
 
@@ -138,34 +122,6 @@ The name and icon to be displayed are set in the `manifest.json` file. Change th
 
 Delete [`manifest.json`](manifest.json) and remove the `<link rel="manifest" href="manifest.json">` tag from the [`index.html`](index.html).
 
-## Gotchas
-
-These are some things to be aware of when using this boilerplate.
-
-### Images in the HTML file(s)
-
-Adding images to the HTML is a bit of a pain right now as webpack only goes through the JavaScript file. Add the image to your HTML file how you always would:
-
-```HTML
-<!-- Normal Image -->
-<img src="img/yourimg.png" />
-<!-- Meta tags -->
-<meta property="og:image" content="img/yourimg.png" />
-<!-- ... -->
-```
-
-If you simply do this, webpack will not transfer the images to the build folder. To get webpack to transfer them, you have to import them with the file loader in your JavaScript somewhere, e.g.:
-
-```JavaScript
-import 'file?name=[name].[ext]!../img/yourimg.png';
-```
-
-Then webpack will correctly transfer the image to the build folder.
-
-## How to contribute
-
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) for infos on how you can help!
-
 ## License
 
-This project is licensed under the MIT license, Copyright (c) 2016 Maximilian Stoiber. For more information see `LICENSE.md`.
+This project is licensed under the MIT license, Copyright (c) 2016 Rafal Szczypka. For more information see `LICENSE.md`.

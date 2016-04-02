@@ -30,18 +30,9 @@ import { Provider } from 'react-redux';
 import { Router, Route } from 'react-router';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import FontFaceObserver from 'fontfaceobserver';
 import createHistory from 'history/lib/createBrowserHistory';
-
-// Observer loading of Open Sans (to remove open sans, remove the <link> tag in the index.html file and this observer)
-const openSansObserver = new FontFaceObserver('Open Sans', {});
-
-// When Open Sans is loaded, add the js-open-sans-loaded class to the body
-openSansObserver.check().then(() => {
-  document.body.classList.add('js-open-sans-loaded');
-}, () => {
-  document.body.classList.remove('js-open-sans-loaded');
-});
+import 'font-awesome/css/font-awesome.min.css';
+import 'bootstrap-loader';
 
 // Import the pages
 import HomePage from './components/pages/HomePage.react';

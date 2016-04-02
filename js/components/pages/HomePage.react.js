@@ -6,24 +6,53 @@
 import { asyncChangeProjectName, asyncChangeOwnerName } from '../../actions/AppActions';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import 'react-widgets/dist/css/react-widgets.css';
+import Combobox from 'react-widgets/lib/Combobox';
+
+var colors = ['orange', 'red', 'blue', 'purple'];
 
 class HomePage extends Component {
   render() {
     const dispatch = this.props.dispatch;
     const { projectName, ownerName } = this.props.data;
     return (
-      <div>
-        <h1>Hello World!</h1>
-        <h2>This is the demo for the <span className="home__text--red">{ projectName }</span> by <a href={'https://twitter.com/' + ownerName} >@{ ownerName }</a></h2>
-        <label className="home__label">Change to your project name:
-          <input className="home__input" type="text" onChange={(evt) => { dispatch(asyncChangeProjectName(evt.target.value)); }} defaultValue="React.js Boilerplate" value={projectName} />
-        </label>
-        <label className="home__label">Change to your name:
-          <input className="home__input" type="text" onChange={(evt) => { dispatch(asyncChangeOwnerName(evt.target.value)); }} defaultValue="mxstbr" value={ownerName} />
-        </label>
-        <Link className="btn" to="/readme">Setup</Link>
-      </div>
+      <form>
+
+        <div className="row">
+          <div className="col-sm-6">
+            <div className="form-group">
+              <label htmlFor="departure">Departure</label>
+              <Combobox
+                id="departure"
+                name="departure"
+                required
+                data={colors}
+              />
+            </div>
+          </div>
+          <div className="col-sm-6">
+            <div className="form-group">
+              <label htmlFor="arrival">Arrival</label>
+              <Combobox
+                id="arrival"
+                name="arrival"
+                required
+                data={colors}
+              />
+            </div>
+          </div>
+
+        </div>
+        <div className="row">
+          <div className="col-sm-6 col-sm-offset-3 text-center">
+            <button
+              className="btn btn-primary btn-block" type="submit"
+              disabled
+            >Get The Trains</button>
+          </div>
+        </div>
+
+      </form>
     );
   }
 }
