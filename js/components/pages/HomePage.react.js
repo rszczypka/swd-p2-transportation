@@ -4,7 +4,7 @@
  */
 
 import { asyncChangeProjectName, asyncChangeOwnerName } from '../../actions/AppActions';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import 'react-widgets/dist/css/react-widgets.css';
 import Combobox from 'react-widgets/lib/Combobox';
@@ -15,7 +15,7 @@ class HomePage extends Component {
 
   render() {
     const dispatch = this.props.dispatch;
-    const { projectName, ownerName } = this.props.data;
+    const { status, stations, fromStation, toStation, trains } = this.props.data;
     return (
       <form>
 
@@ -66,12 +66,6 @@ function select(state) {
     data: state
   };
 }
-
-HomePage.propTypes = {
-  status: PropTypes.object.isRequired,
-  stations: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired
-};
 
 // Wrap the component to inject dispatch and state into it
 export default connect(select)(HomePage);
