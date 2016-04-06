@@ -6,12 +6,13 @@
  * contain code that should be seen on all pages. (e.g. navigation bar)
  */
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Logo from '../../img/logo.png';
 
 class App extends Component {
+
   render() {
     return (
       <div className="appWrapper">

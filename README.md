@@ -24,6 +24,7 @@ A solid starting point achieved with react-boilerplate: (https://github.com/mxst
 
 - [**ServiceWorker**](http://www.html5rocks.com/en/tutorials/service-worker/introduction/) and [**AppCache**](http://www.html5rocks.com/en/tutorials/appcache/beginner/) make it possible to use your application offline. As soon as the website has been opened once, it is cached and available without a network connection. See [this talk](http://mxs.is/swtalk) for an explanation of the ServiceWorker used in this boilerplate. [**`manifest.json`**](https://developer.chrome.com/multidevice/android/installtohomescreen) is specifically for Chrome on Android. Users can add the website to the homescreen and use it like a native app!
 
+- [**window.fetch polyfill**] (https://github.com/github/fetch) this polyfill is written as closely as possible to the standard Fetch specification
 ## Getting started
 
 1. Clone this repo using `git clone https://github.com/rszczypka/swd-p2-transportation.git`.
