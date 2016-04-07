@@ -1,1 +1,3 @@
-h1 {font-size: large;}
+.Select-menu-outer {
+    color: $dark-grey;
+}

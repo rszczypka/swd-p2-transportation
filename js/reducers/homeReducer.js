@@ -13,12 +13,13 @@
  * add it in the rootReducer.js.
  */
 
-import { CHANGE_OWNER_NAME, CHANGE_PROJECT_NAME } from '../constants/AppConstants';
+import { RECEIVE_STATUS, RECEIVE_STATIONS, AWAIT_STATIONS, SET_FROM_STATION, SET_TO_STATION } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
+import { modeled } from 'react-redux-form';
 
 const initialState = {
   status: 'Unavailable',
-  stations: {},
+  stations: [],
   fromStation: {},
   toStation: {},
   trains: {}
@@ -27,17 +28,28 @@ const initialState = {
 function homeReducer(state = initialState, action) {
   Object.freeze(state); // Don't mutate state directly, always use assign()!
   switch (action.type) {
-    case CHANGE_OWNER_NAME:
+    case RECEIVE_STATUS:
       return assignToEmpty(state, {
-        ownerName: action.name
+        status: action.status
       });
-    case CHANGE_PROJECT_NAME:
+    case RECEIVE_STATIONS:
       return assignToEmpty(state, {
-        projectName: action.name
+        stations: action.stations
+      });
+    case SET_FROM_STATION:
+      return assignToEmpty(state, {
+        fromStation: action.station
+      });
+    case SET_TO_STATION:
+      return assignToEmpty(state, {
+        toStation: action.station
       });
     default:
       return state;
   }
 }
 
-export default homeReducer;
+// Decorated modeled reducer
+const modeledHomeReducer = modeled(homeReducer, 'formFields');
+
+export default modeledHomeReducer;

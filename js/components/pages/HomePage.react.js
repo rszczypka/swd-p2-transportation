@@ -7,9 +7,10 @@ import { asyncChangeProjectName, asyncChangeOwnerName } from '../../actions/AppA
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import 'react-widgets/dist/css/react-widgets.css';
-import Combobox from 'react-widgets/lib/Combobox';
-
-var colors = ['orange', 'red', 'blue', 'purple'];
+import VirtualizedSelect from 'react-virtualized-select';
+import 'react-select/dist/react-select.css';
+import 'react-virtualized-select/styles.css';
+import { setFromStation, setToStation } from '../../actions/AppActions';
 
 class HomePage extends Component {
 
@@ -18,27 +19,35 @@ class HomePage extends Component {
     const { status, stations, fromStation, toStation, trains } = this.props.data;
     return (
       <form>
-
+        <p>API Status: <span className={ status==='Available' ? 'label label-success' : 'label label-warning' }>{ status }</span></p>
         <div className="row">
           <div className="col-sm-6">
             <div className="form-group">
               <label htmlFor="departure">Departure</label>
-              <Combobox
-                id="departure"
-                name="departure"
-                required
-                data={colors}
+              <VirtualizedSelect
+                  name="departure"
+                  id="departure"
+                  required
+                  options={ stations }
+                  disabled={ status!=='Available' }
+                  placeholder="Select departure station"
+                  onChange={(selectValue) => dispatch(setFromStation(selectValue))}
+                  value={ fromStation }
               />
             </div>
           </div>
           <div className="col-sm-6">
             <div className="form-group">
               <label htmlFor="arrival">Arrival</label>
-              <Combobox
-                id="arrival"
-                name="arrival"
-                required
-                data={colors}
+              <VirtualizedSelect
+                  name="arrival"
+                  id="arrival"
+                  required
+                  options={ stations }
+                  disabled={ status!=='Available' }
+                  placeholder="Select arrival station"
+                  onChange={(selectValue) => dispatch(setToStation(selectValue))}
+                  value={ toStation }
               />
             </div>
           </div>
@@ -48,7 +57,7 @@ class HomePage extends Component {
           <div className="col-sm-6 col-sm-offset-3 text-center">
             <button
               className="btn btn-primary btn-block" type="submit"
-              disabled
+              disabled={ (!fromStation || !toStation) }
             >Get The Trains</button>
           </div>
         </div>

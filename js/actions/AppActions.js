@@ -27,30 +27,70 @@
 // It makes more sense to have the asnyc actions before the non-async ones
 /* eslint-disable no-use-before-define */
 
-import { CHANGE_OWNER_NAME, CHANGE_PROJECT_NAME } from '../constants/AppConstants';
+import { RECEIVE_STATUS, RECEIVE_STATIONS, AWAIT_STATIONS, SET_FROM_STATION, SET_TO_STATION } from '../constants/AppConstants';
+const api_url = 'http://darwin.hacktrain.com/api';
+const apiKey = 'd158a105-c668-4ad0-9ddb-ce08f4f8eb44';
 
-export function asyncChangeProjectName(name) {
+export function asyncGetStatus() {
   return (dispatch) => {
     // You can do async stuff here!
     // API fetching, Animations,...
     // For more information as to how and why you would do this, check https://github.com/gaearon/redux-thunk
-    return dispatch(changeProjectName(name));
+    fetch(api_url+'/status')
+        .then(function(response) {
+          return response.json();
+        }).then(function(data) {
+          if(data.OpenLDBWS === 'Available') {
+            dispatch(asyncGetStations());
+          }
+          return dispatch(getStatus(data.OpenLDBWS));
+        })
+        .catch(function(err) {
+          console.error(err);
+        });
+
   };
 }
 
-export function asyncChangeOwnerName(name) {
+export function asyncGetStations() {
   return (dispatch) => {
     // You can do async stuff here!
     // API fetching, Animations,...
     // For more information as to how and why you would do this, check https://github.com/gaearon/redux-thunk
-    return dispatch(changeOwnerName(name));
+    fetch(api_url+'/station/code')
+        .then(function(response) {
+          return response.json();
+        }).then(function(data) {
+          console.log(data);
+          const stations = new Array();
+          Object.keys(data).map(function(stationId){
+            stations.push({
+              value: stationId,
+              label: data[stationId]
+            });
+          });
+          console.log(stations);
+          return dispatch(getStations(stations));
+        })
+        .catch(function(err) {
+          console.error(err);
+        });
   };
 }
 
-export function changeProjectName(name) {
-  return { type: CHANGE_PROJECT_NAME, name };
+export function getStatus(status) {
+  return { type: RECEIVE_STATUS, status };
 }
 
-export function changeOwnerName(name) {
-  return { type: CHANGE_OWNER_NAME, name };
+export function getStations(stations) {
+  return { type: RECEIVE_STATIONS, stations };
+}
+
+export function setFromStation(station) {
+    console.log(station);
+    return { type: SET_FROM_STATION, station };
+}
+
+export function setToStation(station) {
+    return { type: SET_TO_STATION, station };
 }
