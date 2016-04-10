@@ -10,20 +10,20 @@ import 'react-widgets/dist/css/react-widgets.css';
 import VirtualizedSelect from 'react-virtualized-select';
 import 'react-select/dist/react-select.css';
 import 'react-virtualized-select/styles.css';
-import { setFromStation, setToStation } from '../../actions/AppActions';
+import { asyncSetToStations, setToStation } from '../../actions/AppActions';
 
 class HomePage extends Component {
 
   render() {
     const dispatch = this.props.dispatch;
-    const { status, stations, fromStation, toStation, trains } = this.props.data;
+    const { status, stations, toStations, fromStation, toStation, trains } = this.props.data;
     return (
       <form>
         <p>API Status: <span className={ status==='Available' ? 'label label-success' : 'label label-warning' }>{ status }</span></p>
         <div className="row">
           <div className="col-sm-6">
             <div className="form-group">
-              <label htmlFor="departure">Departure</label>
+              <label htmlFor="departure">From</label>
               <VirtualizedSelect
                   name="departure"
                   id="departure"
@@ -31,19 +31,19 @@ class HomePage extends Component {
                   options={ stations }
                   disabled={ status!=='Available' }
                   placeholder="Select departure station"
-                  onChange={(selectValue) => dispatch(setFromStation(selectValue))}
+                  onChange={(selectValue) => dispatch(asyncSetToStations(selectValue))}
                   value={ fromStation }
               />
             </div>
           </div>
           <div className="col-sm-6">
             <div className="form-group">
-              <label htmlFor="arrival">Arrival</label>
+              <label htmlFor="arrival">To</label>
               <VirtualizedSelect
                   name="arrival"
                   id="arrival"
                   required
-                  options={ stations }
+                  options={ toStations }
                   disabled={ status!=='Available' }
                   placeholder="Select arrival station"
                   onChange={(selectValue) => dispatch(setToStation(selectValue))}

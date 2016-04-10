@@ -13,7 +13,14 @@
  * add it in the rootReducer.js.
  */
 
-import { RECEIVE_STATUS, RECEIVE_STATIONS, AWAIT_STATIONS, SET_FROM_STATION, SET_TO_STATION } from '../constants/AppConstants';
+import {
+    RECEIVE_STATUS,
+    RECEIVE_STATIONS,
+    RECEIVE_TO_STATIONS,
+    AWAIT_STATIONS,
+    SET_FROM_STATION,
+    SET_TO_STATION
+} from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
 import { modeled } from 'react-redux-form';
 
@@ -35,6 +42,10 @@ function homeReducer(state = initialState, action) {
     case RECEIVE_STATIONS:
       return assignToEmpty(state, {
         stations: action.stations
+      });
+    case RECEIVE_TO_STATIONS:
+      return assignToEmpty(state, {
+        toStations: action.stations
       });
     case SET_FROM_STATION:
       return assignToEmpty(state, {
