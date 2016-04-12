@@ -28,72 +28,37 @@
 /* eslint-disable no-use-before-define */
 
 import {
-    RECEIVE_STATUS,
-    RECEIVE_STATIONS,
+    QUERY_FROM_STATIONS,
+    RECEIVE_FROM_STATIONS,
+    QUERY_TO_STATIONS,
     RECEIVE_TO_STATIONS,
-    AWAIT_STATIONS,
     SET_FROM_STATION,
     SET_TO_STATION
 } from '../constants/AppConstants';
 import {getJson} from '../utils/getJson';
-const api_url = 'http://darwin.hacktrain.com/api';
-const apiKey = 'd158a105-c668-4ad0-9ddb-ce08f4f8eb44';
-const rows = 150;
+const api_url = 'https://api.sncf.com/v1/coverage/sncf';
 
-export function asyncGetStatus() {
+export function asyncGetFromStations(query) {
     return (dispatch) => {
-        // You can do async stuff here!
-        // API fetching, Animations,...
-        // For more information as to how and why you would do this, check https://github.com/gaearon/redux-thunk
-        getJson(api_url + '/status')
-            .then(function (data) {
-                if (data.OpenLDBWS === 'Available') {
-                    dispatch(asyncGetStations());
-                }
-                return dispatch(getStatus(data.OpenLDBWS));
-            })
-            .catch(function (err) {
-                console.error(err);
-            });
-
-    };
-}
-
-export function asyncGetStations() {
-    return (dispatch) => {
-        // You can do async stuff here!
-        // API fetching, Animations,...
-        // For more information as to how and why you would do this, check https://github.com/gaearon/redux-thunk
-        getJson(api_url + '/station/code')
-            .then(function (data) {
-                console.log(data);
-                const stations = new Array();
-                Object.keys(data).map(function (stationId) {
-                    stations.push({
-                        value: stationId,
-                        label: data[stationId]
+            dispatch(queryFromStations());
+            // You can do async stuff here!
+            // API fetching, Animations,...
+            // For more information as to how and why you would do this, check https://github.com/gaearon/redux-thunk
+            return getJson(api_url + '/places?q=' + query + '&type[]=stop_area')
+                .then(function (data) {
+                    const stations = new Array();
+                    data.places.map(function (place) {
+                        stations.push({
+                            value: place.id,
+                            label: place.name
+                        });
                     });
+                    dispatch(receiveFromStations(stations));
+                })
+                .catch(function (err) {
+                    console.log(err);
                 });
-                return dispatch(getStations(stations));
-            })
-            .catch(function (err) {
-                console.error(err);
-            });
-    };
-}
 
-export function asyncGetService(stationId, station2Id) {
-    return (dispatch) => {
-        // You can do async stuff here!
-        // API fetching, Animations,...
-        // For more information as to how and why you would do this, check https://github.com/gaearon/redux-thunk
-        getJson(api_url + '/train/' + stationId + '/from/' + station2Id + '?apiKey=' + apiKey)
-            .then(function (data) {
-                console.log(data);
-            })
-            .catch(function (err) {
-                console.error(err);
-            });
     };
 }
 
@@ -106,10 +71,10 @@ export function asyncSetToStations(fromStation) {
         // For more information as to how and why you would do this, check https://github.com/gaearon/redux-thunk
         getJson(api_url + '/train/' + fromStation.value + '/to?apiKey=' + apiKey + '&rows=' + rows)
             .then(function (data) {
-                return data.map(function(train) {
-                    return getJson(api_url+'/service?id='+train.serviceId+'&apiKey='+apiKey);
-                })
-                    .reduce(function(sequence, trainPromise) {
+                return data.map(function (train) {
+                        return getJson(api_url + '/service?id=' + train.serviceId + '&apiKey=' + apiKey);
+                    })
+                    .reduce(function (sequence, trainPromise) {
                         // Use reduce to chain the promises together,
                         // adding content to the array for each train
 
@@ -117,7 +82,7 @@ export function asyncSetToStations(fromStation) {
                             // Wait for everything in the sequence so far,
                             // then wait for this train info to arrive.
                             return trainPromise;
-                        }).then(function(train) {
+                        }).then(function (train) {
                             stations.push({
                                 value: train.stationCode,
                                 label: train.locationName
@@ -125,7 +90,7 @@ export function asyncSetToStations(fromStation) {
                         })
                     }, Promise.resolve())
 
-        }).then(function() {
+            }).then(function () {
             return dispatch(getToStations(stations));
         }).catch(function (err) {
             console.log("getJSON failed with", err);
@@ -134,15 +99,20 @@ export function asyncSetToStations(fromStation) {
     };
 }
 
-export function getStatus(status) {
-    return {type: RECEIVE_STATUS, status};
+export function queryFromStations() {
+    return {type: QUERY_FROM_STATIONS};
 }
 
-export function getStations(stations) {
-    return {type: RECEIVE_STATIONS, stations};
+export function receiveFromStations(stations) {
+    console.log('receiveFromStations', stations);
+    return {type: RECEIVE_FROM_STATIONS, stations};
 }
 
-export function getToStations(stations) {
+export function queryToStations() {
+    return {type: QUERY_TO_STATIONS};
+}
+
+export function receiveToStations(stations) {
     return {type: RECEIVE_TO_STATIONS, stations};
 }
 

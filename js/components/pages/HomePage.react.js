@@ -7,31 +7,33 @@ import { asyncChangeProjectName, asyncChangeOwnerName } from '../../actions/AppA
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import 'react-widgets/dist/css/react-widgets.css';
+import Select from 'react-select';
 import VirtualizedSelect from 'react-virtualized-select';
 import 'react-select/dist/react-select.css';
 import 'react-virtualized-select/styles.css';
-import { asyncSetToStations, setToStation } from '../../actions/AppActions';
+import { asyncGetFromStations, setFromStation } from '../../actions/AppActions';
 
 class HomePage extends Component {
 
   render() {
     const dispatch = this.props.dispatch;
-    const { status, stations, toStations, fromStation, toStation, trains } = this.props.data;
+    const { fromStations, fromStationsIsLoading, toStations, toStationsIsLoading, fromStation, toStation, trains } = this.props.data;
     return (
       <form>
-        <p>API Status: <span className={ status==='Available' ? 'label label-success' : 'label label-warning' }>{ status }</span></p>
         <div className="row">
           <div className="col-sm-6">
             <div className="form-group">
               <label htmlFor="departure">From</label>
-              <VirtualizedSelect
+              <Select.Async
+                  cache={false}
                   name="departure"
                   id="departure"
                   required
-                  options={ stations }
-                  disabled={ status!=='Available' }
-                  placeholder="Select departure station"
-                  onChange={(selectValue) => dispatch(asyncSetToStations(selectValue))}
+                  isLoading={ fromStationsIsLoading }
+                  loadOptions={ (input) => { return dispatch(asyncGetFromStations(input)).then(() => { console.log('loadOptionsf', fromStations); return { options: fromStations }; }) } }
+                  minimumInput={3}
+                  searchPromptText="Find your from station"
+                  onChange={(selectValue) => dispatch(setFromStation(selectValue))}
                   value={ fromStation }
               />
             </div>
@@ -44,7 +46,6 @@ class HomePage extends Component {
                   id="arrival"
                   required
                   options={ toStations }
-                  disabled={ status!=='Available' }
                   placeholder="Select arrival station"
                   onChange={(selectValue) => dispatch(setToStation(selectValue))}
                   value={ toStation }

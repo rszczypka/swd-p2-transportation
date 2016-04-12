@@ -1,9 +1,13 @@
+const apiKey = 'c3b2666e-7427-4346-bca3-da2774945210';
+
 export const get = (url) => {
   // Return a new promise.
   return new Promise((resolve, reject) => {
     // Do the usual XHR stuff
     var req = new XMLHttpRequest();
+
     req.open('GET', url);
+    req.setRequestHeader('Authorization', 'Basic ' + window.btoa(apiKey+':') );
 
     req.onload = () => {
       // This is called even on 404 etc
