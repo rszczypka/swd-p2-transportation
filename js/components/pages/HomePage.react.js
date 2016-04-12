@@ -3,7 +3,6 @@
  * This is the first thing users see of our App
  */
 
-import { asyncChangeProjectName, asyncChangeOwnerName } from '../../actions/AppActions';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import 'react-widgets/dist/css/react-widgets.css';
@@ -11,13 +10,13 @@ import Select from 'react-select';
 import VirtualizedSelect from 'react-virtualized-select';
 import 'react-select/dist/react-select.css';
 import 'react-virtualized-select/styles.css';
-import { asyncGetFromStations, setFromStation } from '../../actions/AppActions';
+import { asyncGetStations, setFromStation, setToStation } from '../../actions/AppActions';
 
 class HomePage extends Component {
 
   render() {
     const dispatch = this.props.dispatch;
-    const { fromStations, fromStationsIsLoading, toStations, toStationsIsLoading, fromStation, toStation, trains } = this.props.data;
+    const { stations, stationsIsLoading, fromStation, toStation, trains } = this.props.data;
     return (
       <form>
         <div className="row">
@@ -25,13 +24,12 @@ class HomePage extends Component {
             <div className="form-group">
               <label htmlFor="departure">From</label>
               <Select.Async
-                  cache={false}
                   name="departure"
                   id="departure"
                   required
-                  isLoading={ fromStationsIsLoading }
-                  loadOptions={ (input) => { return dispatch(asyncGetFromStations(input)).then(() => { console.log('loadOptionsf', fromStations); return { options: fromStations }; }) } }
-                  minimumInput={3}
+                  isLoading={ stationsIsLoading }
+                  loadOptions={ (input) => { return dispatch(asyncGetStations(input)).then(() => { console.log('loadOptions', stations); return { options: stations }; }) } }
+                  minimumInput={2}
                   searchPromptText="Find your from station"
                   onChange={(selectValue) => dispatch(setFromStation(selectValue))}
                   value={ fromStation }
@@ -41,12 +39,14 @@ class HomePage extends Component {
           <div className="col-sm-6">
             <div className="form-group">
               <label htmlFor="arrival">To</label>
-              <VirtualizedSelect
+              <Select.Async
                   name="arrival"
                   id="arrival"
                   required
-                  options={ toStations }
-                  placeholder="Select arrival station"
+                  isLoading={ stationsIsLoading }
+                  loadOptions={ (input) => { return dispatch(asyncGetStations(input)).then(() => { console.log('loadOptions', stations); return { options: stations }; }) } }
+                  minimumInput={2}
+                  searchPromptText="Select your To station"
                   onChange={(selectValue) => dispatch(setToStation(selectValue))}
                   value={ toStation }
               />

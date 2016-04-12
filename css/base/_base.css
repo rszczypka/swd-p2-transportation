@@ -32,7 +32,7 @@ main {
 	padding: 50px 0;
 	color: #fff;
 	background-color: $brand-color;
-	background-image: linear-gradient(rgba($brand-color,0.9),rgba($brand-color,0.9)), resolve('train.jpg');
+	background-image: linear-gradient(rgba($brand-color,0.9),rgba($brand-color,0.9)), resolve('railway-station-france.jpg');
 	background-repeat: no-repeat;
 	background-position: center 0,left center;
 	background-size: cover;
