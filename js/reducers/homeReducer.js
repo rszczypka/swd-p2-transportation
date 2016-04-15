@@ -14,33 +14,52 @@
  */
 
 import {
-    QUERY_STATIONS,
+    QUERY_FROM_STATIONS,
+    QUERY_TO_STATIONS,
     RECEIVE_STATIONS,
     SET_FROM_STATION,
-    SET_TO_STATION
+    SET_TO_STATION,
+    QUERY_JOURNEYS,
+    RECEIVE_JOURNEYS
 } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
 import {modeled} from 'react-redux-form';
 
 const initialState = {
     stations: [],
-    stationsIsLoading: false,
+    fromStationsIsLoading: false,
+    toStationsIsLoading: false,
     fromStation: {},
     toStation: {},
-    trains: {}
+    journeys: {},
+    journeysIsLoading: false
 };
 
 function homeReducer(state = initialState, action) {
     Object.freeze(state); // Don't mutate state directly, always use assign()!
     switch (action.type) {
-        case QUERY_STATIONS:
+        case QUERY_FROM_STATIONS:
             return assignToEmpty(state, {
-                stationsIsLoading: true
+                fromStationsIsLoading: true
+            });
+        case QUERY_TO_STATIONS:
+            return assignToEmpty(state, {
+                toStationsIsLoading: true
             });
         case RECEIVE_STATIONS:
             return assignToEmpty(state, {
                 stations: action.stations,
-                stationsIsLoading: false
+                fromStationsIsLoading: false,
+                toStationsIsLoading: false
+            });
+        case QUERY_JOURNEYS:
+            return assignToEmpty(state, {
+                journeysIsLoading: true
+            });
+        case RECEIVE_JOURNEYS:
+            return assignToEmpty(state, {
+                journeys: action.journeys,
+                journeysIsLoading: false
             });
         case SET_FROM_STATION:
             return assignToEmpty(state, {

@@ -1,3 +1,7 @@
 .Select-menu-outer {
     color: $dark-grey;
 }
+
+.panel {
+    background: rgba($brand-color,0.85);
+}

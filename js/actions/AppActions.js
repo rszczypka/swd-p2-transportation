@@ -28,17 +28,22 @@
 /* eslint-disable no-use-before-define */
 
 import {
-    QUERY_STATIONS,
+    QUERY_FROM_STATIONS,
+    QUERY_TO_STATIONS,
     RECEIVE_STATIONS,
     SET_FROM_STATION,
-    SET_TO_STATION
+    SET_TO_STATION,
+    QUERY_JOURNEYS,
+    RECEIVE_JOURNEYS
 } from '../constants/AppConstants';
 import {getJson} from '../utils/getJson';
+import moment from 'moment';
+import 'moment-timezone';
 const api_url = 'https://api.sncf.com/v1/coverage/sncf';
 
-export function asyncGetStations(query) {
+export function asyncGetStations(query, what) {
     return (dispatch) => {
-            dispatch(queryStations());
+            what === 'from' ? dispatch(queryFromStations()) : dispatch(queryToStations());
             // You can do async stuff here!
             // API fetching, Animations,...
             // For more information as to how and why you would do this, check https://github.com/gaearon/redux-thunk
@@ -60,8 +65,39 @@ export function asyncGetStations(query) {
     };
 }
 
-export function queryStations() {
-    return {type: QUERY_STATIONS};
+export function asyncGetJourneys(fromStation,toStation) {
+    return (dispatch) => {
+        dispatch(queryJourneys());
+        // You can do async stuff here!
+        // API fetching, Animations,...
+        // For more information as to how and why you would do this, check https://github.com/gaearon/redux-thunk
+        const dateTime = moment.tz('Europe/Paris').format('YYYYMMDDThhmmss');
+        return getJson(api_url + '/journeys?from=' + fromStation + '&to=' + toStation + '&datetime=' + dateTime)
+            .then(function (data) {
+                console.log(data);
+                dispatch(receiveJourneys(data));
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+
+    };
+}
+
+export function queryJourneys() {
+    return {type: QUERY_JOURNEYS};
+}
+
+export function receiveJourneys(journeys) {
+    return {type: RECEIVE_JOURNEYS, journeys};
+}
+
+export function queryFromStations() {
+    return {type: QUERY_FROM_STATIONS};
+}
+
+export function queryToStations() {
+    return {type: QUERY_TO_STATIONS};
 }
 
 export function receiveStations(stations) {

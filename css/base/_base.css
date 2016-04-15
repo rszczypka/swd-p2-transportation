@@ -38,6 +38,10 @@ main {
 	background-size: cover;
 }
 
+main form {
+	margin-bottom: 20px;
+}
+
 main small {
 	color: $light-grey;
 }
