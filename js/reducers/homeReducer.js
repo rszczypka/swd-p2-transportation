@@ -20,7 +20,8 @@ import {
     SET_FROM_STATION,
     SET_TO_STATION,
     QUERY_JOURNEYS,
-    RECEIVE_JOURNEYS
+    RECEIVE_JOURNEYS,
+    SET_STATION_ERROR
 } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
 import {modeled} from 'react-redux-form';
@@ -30,6 +31,8 @@ const initialState = {
     fromStationsIsLoading: false,
     toStationsIsLoading: false,
     fromStation: {},
+    fromStationError: '',
+    toStationError: '',
     toStation: {},
     journeys: {
         disruptions: [],
@@ -61,7 +64,8 @@ function homeReducer(state = initialState, action) {
             });
         case QUERY_JOURNEYS:
             return assignToEmpty(state, {
-                journeysIsLoading: true
+                journeysIsLoading: true,
+                stationError: ''
             });
         case RECEIVE_JOURNEYS:
             return assignToEmpty(state, {
@@ -70,11 +74,17 @@ function homeReducer(state = initialState, action) {
             });
         case SET_FROM_STATION:
             return assignToEmpty(state, {
-                fromStation: action.station
+                fromStation: action.station,
+                stationError: ''
             });
         case SET_TO_STATION:
             return assignToEmpty(state, {
-                toStation: action.station
+                toStation: action.station,
+                stationError: ''
+            });
+        case SET_STATION_ERROR:
+            return assignToEmpty(state, {
+                stationError: action.error
             });
         default:
             return state;

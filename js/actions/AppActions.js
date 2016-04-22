@@ -34,7 +34,8 @@ import {
     SET_FROM_STATION,
     SET_TO_STATION,
     QUERY_JOURNEYS,
-    RECEIVE_JOURNEYS
+    RECEIVE_JOURNEYS,
+    SET_STATION_ERROR
 } from '../constants/AppConstants';
 import {getJson} from '../utils/getJson';
 import moment from 'moment';
@@ -109,4 +110,8 @@ export function setFromStation(station) {
 
 export function setToStation(station) {
     return {type: SET_TO_STATION, station};
+}
+
+export function setStationError(error) {
+    return {type: SET_STATION_ERROR, error};
 }

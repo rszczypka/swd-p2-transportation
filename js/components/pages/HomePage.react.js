@@ -8,7 +8,14 @@ import {connect} from 'react-redux';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import Journeys from '../Journeys.react';
-import {asyncGetStations, asyncGetJourneys, setFromStation, setToStation} from '../../actions/AppActions';
+import {
+    asyncGetStations,
+    asyncGetJourneys,
+    setFromStation,
+    setToStation,
+    setStationError
+} from '../../actions/AppActions';
+import _ from 'lodash';
 
 class HomePage extends Component {
 
@@ -20,14 +27,52 @@ class HomePage extends Component {
         return dispatch(asyncGetJourneys(fromStation.value, toStation.value));
     }
 
+    handleFromChange(selectedValue) {
+        const dispatch = this.props.dispatch;
+        const {toStation} = this.props.data;
+
+        if(!selectedValue) return dispatch(setFromStation({}));
+
+        if (selectedValue.value !== toStation.value) {
+            return dispatch(setFromStation(selectedValue));
+        }
+
+        return dispatch(setStationError('FROM station should be different than TO station'));
+    }
+
+    handleToChange(selectedValue) {
+        const dispatch = this.props.dispatch;
+        const {fromStation} = this.props.data;
+
+        if(!selectedValue) return dispatch(setToStation({}));
+
+        if (selectedValue.value !== fromStation.value) {
+            return dispatch(setToStation(selectedValue));
+        }
+
+        return dispatch(setStationError('FROM station should be different than TO station'));
+    }
+
     render() {
         const dispatch = this.props.dispatch;
-        const {stations, toStationsIsLoading, fromStationsIsLoading, fromStation, toStation} = this.props.data;
+        const {stations, toStationsIsLoading, fromStationsIsLoading, fromStation, toStation, stationError} = this.props.data;
 
         return (
             <div>
                 <form className="trainForm" onSubmit={(e) => this.handleSubmit(e)}>
                     <div className="container">
+                        { stationError &&
+                        <div
+                            role="alert"
+                            className={ (stationError) ? 'alert alert-danger' : '' }
+                        >
+                            <ul className="list-unstyled">
+                                <li>
+                                    <span className="label label-danger">error</span> { stationError }
+                                </li>
+                            </ul>
+                        </div>
+                        }
                         <div className="row">
                             <div className="col-sm-6">
                                 <div className="form-group">
@@ -41,7 +86,7 @@ class HomePage extends Component {
                                         loadOptions={ (input) => { return dispatch(asyncGetStations(input,'from')).then(() => { return { options: stations }; }) } }
                                         minimumInput={2}
                                         searchPromptText="Start typing the name of your FROM station"
-                                        onChange={(selectValue) => dispatch(setFromStation(selectValue))}
+                                        onChange={(selectValue) => this.handleFromChange(selectValue)}
                                         value={ fromStation }
                                     />
                                 </div>
@@ -58,7 +103,7 @@ class HomePage extends Component {
                                         loadOptions={ (input) => { return dispatch(asyncGetStations(input,'to')).then(() => { return { options: stations }; }) } }
                                         minimumInput={2}
                                         searchPromptText="Start typing the name of your TO station"
-                                        onChange={(selectValue) => dispatch(setToStation(selectValue))}
+                                        onChange={(selectValue) => this.handleToChange(selectValue)}
                                         value={ toStation }
                                     />
                                 </div>
@@ -69,7 +114,7 @@ class HomePage extends Component {
                             <div className="col-sm-4 col-sm-offset-4 text-center">
                                 <button
                                     className="btn btn-primary btn-block" type="submit"
-                                    disabled={ (!fromStation || !toStation) }
+                                    disabled={ (_.isEmpty(fromStation) || _.isEmpty(toStation)) }
                                 >Get The Train
                                 </button>
                             </div>

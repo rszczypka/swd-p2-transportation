@@ -1,6 +1,35 @@
 /*This file contains all styles related to the header of the site/application.*/
-.navbar {
+.header {
+    background-color: $light-brand-color;
+    background-image: linear-gradient(rgba($light-brand-color,0.9),rgba($light-brand-color,0.9)), resolve('railway-station-france.jpg');
+    background-repeat: no-repeat;
+    background-position: center 0,left center;
+    background-size: cover;
+    padding: 20px 0 0;
+    color: #fff;
+    position: relative;
+    text-align: center;
+}
+
+.trademark {
+    display: inline-block;
+}
+
+.header h1 {
+    font-size: 3.2em;
+    font-weight: bold;
+    margin: 0.25em 0 0;
+    text-shadow: -5px 1px 0px rgba(23,113,166,1);
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 1.6em;
+}
+
+.logo {
     margin-bottom: 0;
     border-radius: 0;
     border: none;
+    margin-bottom: -35px;
 }

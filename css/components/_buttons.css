@@ -1,8 +1,9 @@
 /*This file contains all styles related to the button component.*/
 .btn-primary {
     background-color: $accent-color;
-    border-color: rgba($accent-color, 0.9);
+    border-color: $dark-accent-color;
     font-weight: bold;
+    font-size: 1em;
 }
 
 .btn-primary:hover {

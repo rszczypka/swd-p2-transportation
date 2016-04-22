@@ -9,23 +9,22 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import Logo from '../../img/logo.png';
+import Logo from '../../img/train.png';
 
 class App extends Component {
 
   render() {
     return (
       <div className="appWrapper">
-        <nav className="navbar navbar-inverse navbar-default">
+        <header className="header text-center">
           <div className="container">
-            <div className="navbar-header">
-              <Link className="navbar-brand" activeClassName="active" to="/">
-                Get The Train
-              </Link>
+            <div className="trademark">
+              <h1>SNCF voyageurs</h1>
+              <h2>Discover France</h2>
+              <img className="logo" src={Logo} />
             </div>
           </div>
-        </nav>
-
+        </header>
           <main>
             { this.props.children }
           </main>
@@ -33,7 +32,8 @@ class App extends Component {
         <footer>
           <div className="container">
             <hr />
-            <ul className="list-inline">
+            <p className="text-capitalize text-center">Embarquement pour un merveilleux voyage! <small>Get on board for a spectacular journey!</small></p>
+            <ul className="list-inline text-center">
               <li>&copy; 2016 Rafal Szczypka</li>
               <li>
                 <Link
