@@ -1,1 +1,10 @@
 /*This file contains all styles related to the button component.*/
+.btn-primary {
+    background-color: $accent-color;
+    border-color: rgba($accent-color, 0.9);
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background-color: $dark-accent-color;
+}

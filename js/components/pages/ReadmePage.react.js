@@ -10,7 +10,7 @@ import { Link } from 'react-router';
 export default class ReadmePage extends Component {
   render() {
     return (
-      <div>
+      <div className="container">
         <h2>About the application <small>Get The Train</small></h2>
         <p>Get The Train is an offline-first application that allows users to select a departure and arrival train station,
           and see a list of trains, times, and durations. A default train schedule will be provided that should be

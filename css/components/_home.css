@@ -2,6 +2,68 @@
     color: $dark-grey;
 }
 
-.panel {
-    background: rgba($brand-color,0.85);
+.trainForm {
+    padding: 20px 0 25px;
+    color: #fff;
+    background-color: $brand-color;
+    background-image: linear-gradient(rgba($brand-color,0.9),rgba($brand-color,0.9)), resolve('railway-station-france.jpg');
+    background-repeat: no-repeat;
+    background-position: center 0,left center;
+    background-size: cover;
+    margin-bottom: 20px;
+}
+
+.trainLine {
+    position: absolute;
+    display: inline-block;
+    top: 7px;
+    left: 17px;
+    width: calc(100% - 45px);
+    height: 5px;
+    background-color: $mid-grey;
+}
+
+.trainLineTo, .trainLineFrom {
+    color: $mid-grey;
+}
+
+.trainLineTo {
+    position: absolute;
+    right: 15px;
+    top: 2px;
+}
+.panel-heading .trainLine {
+    background-color: $accent-color;
+}
+.panel-heading .trainLineTo,.panel-heading  .trainLineFrom {
+    color: $accent-color;
+}
+
+.journeys small {
+    text-transform: uppercase;
+    color: $dark-grey;
+}
+
+.panel-body .row {
+    border-bottom: 1px solid $light-grey;
+    padding: 10px 0;
+    position: relative;
+}
+
+.section {
+    position: absolute;
+    background: $light-grey;
+    color: $mid-grey;
+    display: inline-block;
+    border-radius: 100px;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    top: 8px;
+    left: -13px;
+}
+
+.label {
+    padding: 0 5px;
 }

@@ -31,7 +31,14 @@ const initialState = {
     toStationsIsLoading: false,
     fromStation: {},
     toStation: {},
-    journeys: {},
+    journeys: {
+        disruptions: [],
+        exceptions: [],
+        journeys: [],
+        links: [],
+        notes: [],
+        tickets: []
+    },
     journeysIsLoading: false
 };
 

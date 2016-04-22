@@ -1,31 +1,145 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import Journey from './Journeys.react';
 import moment from 'moment';
+import 'moment-duration-format';
+import {Panel, PanelGroup} from 'react-bootstrap';
 import _ from 'lodash';
 
 class Journeys extends Component {
 
     render() {
-        const { journeysIsLoading, journeys, fromStation, toStation } = this.props.data;
-        //const disruptions = journeys.journeys.disruptions;
-        //const notes = journeys.journeys.notes;
+        let display_journey;
+        let journey_info;
+        const {journeysIsLoading, journeys, fromStation, toStation} = this.props.data;
+
+        if(journeys.journeys){
+            journey_info = journeys.journeys.map(function(journey_item, index){
+                let one_journey;
+                let sections = journey_item.sections.map(function (section, index) {
+                    let output = '';
+                    if (section.type === 'public_transport') {
+                        output = (
+                            <div className="row">
+                                <div className="col-sm-5">
+                                    <strong>
+                                        <small>{ section.from.name }</small>
+                                    </strong><br />
+                                    <small>Departure: </small>
+                                    <strong className="accent-color">
+                                        { moment(section.departure_date_time).format('HH:mm') }
+                                    </strong>
+                                </div>
+                                <div className="col-sm-2">
+                                    <span className="fa fa-circle trainLineFrom"></span>
+                                    <span className="trainLine"></span>
+                                    <span className="fa fa-chevron-circle-right trainLineTo"></span>
+                                </div>
+                                <div className="col-sm-5 text-right">
+                                    <strong>
+                                        <small>{ section.to.name }</small>
+                                    </strong><br />
+                                    <small>Arrival: </small>
+                                    <strong className="accent-color">
+                                        { moment(section.arrival_date_time).format('HH:mm') }
+                                    </strong>
+                                </div>
+                            </div>
+                        );
+                    }
+
+                    if (section.type === 'waiting') {
+                        output = (
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <small>Waiting for: </small>
+                                    <strong className="accent-color">
+                                        { moment.duration(section.duration, 'seconds').format('H[h]mm[min]') }
+                                    </strong>
+                                </div>
+                            </div>
+                        );
+                    }
+
+                    if (section.type === 'transfer') {
+                        output = (
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <small>{ section.transfer_type } for: </small>
+                                    <strong className="accent-color">
+                                        { moment.duration(section.duration, 'seconds').format('H[h]mm[min]') }
+                                    </strong>
+                                    <br />from <strong>
+                                    <small>{ section.from.name }</small>
+                                </strong> to <strong>
+                                    <small>{ section.to.name }</small>
+                                </strong>
+                                </div>
+                            </div>
+                        );
+                    }
 
 
-        /*journeys.map(function (place) {
-            stations.push({
-                value: place.id,
-                label: place.name
+                    return output;
+
+                });
+
+                let journey_title = (
+                    <div className="panel-heading">
+                        <ul className="list-inline">
+                            <li>
+                                <small>Journey Duration: </small>
+                                <strong>{ moment.duration(journey_item.duration, 'seconds').format('H[h]mm[min]') }</strong>
+                            </li>
+                            <li><span className="label label-default">{ journey_item.type.replace(/[_]/g,' ') }</span></li>
+                            <li>{ journey_item.status ? 'Information: ' + journey_item.status : '' }</li>
+                            <li>{ journey_item.display_informations ? journey_item.display_informations.commercial_mode : '' }</li>
+                            <li className="pull-right">
+                                <strong>{ journey_item.nb_transfers === 0 ? 'Direct journey' : 'Connections: ' + journey_item.nb_transfers }</strong>
+                            </li>
+                        </ul>
+                        <div className="row">
+                            <div className="col-sm-5">
+                                <small>Journey Departure: </small>
+                                <strong
+                                    className="accent-color">{ moment(journey_item.departure_date_time).format('HH:mm') }</strong>
+                            </div>
+                            <div className="col-sm-2">
+                                <span className="fa fa-circle accent-color trainLineFrom"></span>
+                                <span className="trainLine"></span>
+                                <span className="fa fa-chevron-circle-right accent-color trainLineTo"></span>
+                            </div>
+                            <div className="col-sm-5 text-right">
+                                <small>Journey Arrival: </small>
+                                <strong
+                                    className="accent-color">{ moment(journey_item.arrival_date_time).format('HH:mm') }</strong>
+                            </div>
+                        </div>
+                    </div>
+                );
+
+                return (
+                    <Panel eventKey={ index } header={ journey_title }>
+                        <div className="panel-body">
+                            { sections }
+                        </div>
+                    </Panel>
+                )
             });
-        });
+        }
 
-        const rows_of_journeys = journeys.journeys.map(function (journey) {
-            return (
-                <Journey
-                    key={ eventid }
-                    journey={ journey }
-                />
+
+
+        if (journey_info) {
+            display_journey = (
+                <div>
+                    <PanelGroup accordion>
+                        { journey_info }
+                    </PanelGroup>
+                </div>
             );
-        })*/
+        }
+
 
         const loadingJourneys = (
             <div className="text-center">
@@ -42,7 +156,8 @@ class Journeys extends Component {
                     <p>
                         <i className="fa fa-3x fa-calendar-times-o text-muted"></i>
                     </p>
-                    <p>There are no trains available from <strong>{ fromStation.label }</strong> to <strong>{ toStation.label }</strong></p>
+                    <p>There are no trains available from <strong>{ fromStation.label }</strong> to
+                        <strong>{ toStation.label }</strong></p>
                 </div>
             </div>
         );
@@ -68,13 +183,15 @@ class Journeys extends Component {
                 </div>
             );
         }
-        return (
-            <div className="journeys">
-                <div className="panel panel-sm">
-                    <div className="panel-heading">Journeys</div>
+        if (display_journey) {
+            return (
+                <div className="journeys">
+                    { display_journey }
                 </div>
-            </div>
-        );
+            );
+        }
+        return false;
+
     }
 }
 

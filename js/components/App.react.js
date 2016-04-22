@@ -20,33 +20,31 @@ class App extends Component {
           <div className="container">
             <div className="navbar-header">
               <Link className="navbar-brand" activeClassName="active" to="/">
-                Get The Trains
+                Get The Train
               </Link>
-            </div>
-            <div className="navbar-collapse" >
-            <ul className="nav navbar-nav navbar-right">
-              <li> <Link
-                to="/readme"
-                activeClassName="active"
-                onlyActiveOnIndex
-              >
-                About
-              </Link></li>
-            </ul>
             </div>
           </div>
         </nav>
 
           <main>
-            <div className="container">
             { this.props.children }
-            </div>
           </main>
 
         <footer>
           <div className="container">
             <hr />
-            <p>&copy; 2016 <i className="fa fa-flask"></i> Rafal Szczypka</p>
+            <ul className="list-inline">
+              <li>&copy; 2016 Rafal Szczypka</li>
+              <li>
+                <Link
+                  to="/readme"
+                  activeClassName="active"
+                  onlyActiveOnIndex
+                >
+                  <span className="fa fa-info"></span> About
+                </Link>
+              </li>
+            </ul>
           </div>
         </footer>
       </div>

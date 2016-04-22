@@ -5,6 +5,8 @@
  */
 html {
   box-sizing: border-box;
+	-webkit-tap-highlight-color: transparent;
+	overflow-y: scroll;
 }
 
 /**
@@ -26,22 +28,9 @@ body {
 body {
 	font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 	color: $text-color;
+	font-size: 16px;
 }
 
-main {
-	padding: 50px 0;
-	color: #fff;
-	background-color: $brand-color;
-	background-image: linear-gradient(rgba($brand-color,0.9),rgba($brand-color,0.9)), resolve('railway-station-france.jpg');
-	background-repeat: no-repeat;
-	background-position: center 0,left center;
-	background-size: cover;
-}
-
-main form {
-	margin-bottom: 20px;
-}
-
-main small {
-	color: $light-grey;
+.accent-color {
+	color: $accent-color;
 }
