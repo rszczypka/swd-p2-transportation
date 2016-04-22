@@ -36,10 +36,11 @@ class HomePage extends Component {
                                         name="departure"
                                         id="departure"
                                         required
+                                        matchProp="label"
                                         isLoading={ fromStationsIsLoading }
-                                        loadOptions={ (input) => { return dispatch(asyncGetStations(input,'from')).then(() => { console.log('loadOptions', stations); return { options: stations }; }) } }
+                                        loadOptions={ (input) => { return dispatch(asyncGetStations(input,'from')).then(() => { return { options: stations }; }) } }
                                         minimumInput={2}
-                                        searchPromptText="Start typing your from station"
+                                        searchPromptText="Start typing the name of your FROM station"
                                         onChange={(selectValue) => dispatch(setFromStation(selectValue))}
                                         value={ fromStation }
                                     />
@@ -52,10 +53,11 @@ class HomePage extends Component {
                                         name="arrival"
                                         id="arrival"
                                         required
+                                        matchProp="label"
                                         isLoading={ toStationsIsLoading }
-                                        loadOptions={ (input) => { return dispatch(asyncGetStations(input,'to')).then(() => { console.log('loadOptions', stations); return { options: stations }; }) } }
+                                        loadOptions={ (input) => { return dispatch(asyncGetStations(input,'to')).then(() => { return { options: stations }; }) } }
                                         minimumInput={2}
-                                        searchPromptText="Start typing your to station"
+                                        searchPromptText="Start typing the name of your TO station"
                                         onChange={(selectValue) => dispatch(setToStation(selectValue))}
                                         value={ toStation }
                                     />

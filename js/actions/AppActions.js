@@ -74,7 +74,6 @@ export function asyncGetJourneys(fromStation,toStation) {
         const dateTime = moment.tz('Europe/Paris').format('YYYYMMDDThhmmss');
         return getJson(api_url + '/journeys?from=' + fromStation + '&to=' + toStation + '&datetime=' + dateTime)
             .then(function (data) {
-                console.log(data);
                 dispatch(receiveJourneys(data));
             })
             .catch(function (err) {
@@ -105,7 +104,6 @@ export function receiveStations(stations) {
 }
 
 export function setFromStation(station) {
-    console.log(station);
     return {type: SET_FROM_STATION, station};
 }
 

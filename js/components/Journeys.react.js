@@ -20,7 +20,7 @@ class Journeys extends Component {
                     let output = '';
                     if (section.type === 'public_transport') {
                         output = (
-                            <div className="row">
+                            <div className="row" key={'section'+index}>
                                 <div className="col-sm-5">
                                     <strong>
                                         <small>{ section.from.name }</small>
@@ -50,7 +50,7 @@ class Journeys extends Component {
 
                     if (section.type === 'waiting') {
                         output = (
-                            <div className="row">
+                            <div className="row" key={'section'+index}>
                                 <div className="col-sm-12">
                                     <small>Waiting for: </small>
                                     <strong className="accent-color">
@@ -63,7 +63,7 @@ class Journeys extends Component {
 
                     if (section.type === 'transfer') {
                         output = (
-                            <div className="row">
+                            <div className="row" key={'section'+index}>
                                 <div className="col-sm-12">
                                     <small>{ section.transfer_type } for: </small>
                                     <strong className="accent-color">
@@ -119,7 +119,7 @@ class Journeys extends Component {
                 );
 
                 return (
-                    <Panel eventKey={ index } header={ journey_title }>
+                    <Panel key={'journey'+index} eventKey={ index } header={ journey_title }>
                         <div className="panel-body">
                             { sections }
                         </div>
