@@ -60,6 +60,14 @@
     left: -13px;
 }
 
+https://api.transitfeeds.com/v1/getLatestFeedVersion?feed=zditm-szczecin%2F587&key=6e9e807d-7f94-44ca-bef1-fd1645791ac2
+
 .label {
     padding: 0 5px;
+}
+
+.list-inline {
+    font-size: 85%;
+    margin-top: 0.25em;
+    margin-bottom: 0;
 }

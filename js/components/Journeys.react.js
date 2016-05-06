@@ -86,21 +86,9 @@ class Journeys extends Component {
 
                 let journey_title = (
                     <div className="panel-heading">
-                        <ul className="list-inline">
-                            <li>
-                                <small>Journey Duration: </small>
-                                <strong>{ moment.duration(journey_item.duration, 'seconds').format('H[h]mm[min]') }</strong>
-                            </li>
-                            <li><span className="label label-default">{ journey_item.type.replace(/[_]/g,' ') }</span></li>
-                            <li>{ journey_item.status ? 'Information: ' + journey_item.status : '' }</li>
-                            <li>{ journey_item.display_informations ? journey_item.display_informations.commercial_mode : '' }</li>
-                            <li className="pull-right">
-                                <strong>{ journey_item.nb_transfers === 0 ? 'Direct journey' : 'Connections: ' + journey_item.nb_transfers }</strong>
-                            </li>
-                        </ul>
                         <div className="row">
                             <div className="col-sm-5">
-                                <small>Journey Departure: </small>
+                                <small>Departure Time: </small>
                                 <strong
                                     className="accent-color">{ moment(journey_item.departure_date_time).format('HH:mm') }</strong>
                             </div>
@@ -110,11 +98,22 @@ class Journeys extends Component {
                                 <span className="fa fa-chevron-circle-right accent-color trainLineTo"></span>
                             </div>
                             <div className="col-sm-5 text-right">
-                                <small>Journey Arrival: </small>
+                                <small>Arrival Time: </small>
                                 <strong
                                     className="accent-color">{ moment(journey_item.arrival_date_time).format('HH:mm') }</strong>
                             </div>
                         </div>
+                        <ul className="list-inline">
+                            <li>
+                                Journey Duration: <strong>{ moment.duration(journey_item.duration, 'seconds').format('H[h]mm[min]') }</strong>
+                            </li>
+                            <li>{ journey_item.status ? 'Information: ' + journey_item.status : '' }</li>
+                            <li>{ journey_item.display_informations ? journey_item.display_informations.commercial_mode : '' }</li>
+                            <li className="pull-right">
+                                <strong>{ journey_item.nb_transfers === 0 ? 'Direct journey' : 'Connections: ' + journey_item.nb_transfers }</strong>
+                            </li>
+                        </ul>
+
                     </div>
                 );
 
