@@ -24,7 +24,7 @@ class HomePage extends Component {
         const {fromStation, toStation} = this.props.data;
 
         e.preventDefault();
-        return dispatch(asyncGetJourneys(fromStation.value, toStation.value));
+        return dispatch(asyncGetJourneys(fromStation, toStation));
     }
 
     handleFromChange(selectedValue) {

@@ -42,6 +42,7 @@ const initialState = {
         notes: [],
         tickets: []
     },
+    offlineLastUpdate: '',
     journeysIsLoading: false
 };
 
@@ -69,7 +70,8 @@ function homeReducer(state = initialState, action) {
             });
         case RECEIVE_JOURNEYS:
             return assignToEmpty(state, {
-                journeys: action.journeys,
+                journeys: action.data.journeys,
+                offlineLastUpdate: action.data.lastUpdate || '',
                 journeysIsLoading: false
             });
         case SET_FROM_STATION:

@@ -28,90 +28,127 @@
 /* eslint-disable no-use-before-define */
 
 import {
-    QUERY_FROM_STATIONS,
-    QUERY_TO_STATIONS,
-    RECEIVE_STATIONS,
-    SET_FROM_STATION,
-    SET_TO_STATION,
-    QUERY_JOURNEYS,
-    RECEIVE_JOURNEYS,
-    SET_STATION_ERROR
+  QUERY_FROM_STATIONS,
+  QUERY_TO_STATIONS,
+  RECEIVE_STATIONS,
+  SET_FROM_STATION,
+  SET_TO_STATION,
+  QUERY_JOURNEYS,
+  RECEIVE_JOURNEYS,
+  SET_STATION_ERROR
 } from '../constants/AppConstants';
+import Dexie from 'dexie';
 import {getJson} from '../utils/getJson';
 import moment from 'moment';
 import 'moment-timezone';
 const api_url = 'https://api.sncf.com/v1/coverage/sncf';
+const db = new Dexie('SNCFApp');
+
+db.version(1).stores({
+  results: 'from_to'
+});
+
+db.open();
 
 export function asyncGetStations(query, what) {
-    return (dispatch) => {
-            what === 'from' ? dispatch(queryFromStations()) : dispatch(queryToStations());
-            // You can do async stuff here!
-            // API fetching, Animations,...
-            // For more information as to how and why you would do this, check https://github.com/gaearon/redux-thunk
-            return getJson(api_url + '/places?q=' + query + '&type[]=stop_area')
-                .then(function (data) {
-                    const stations = new Array();
-                    data.places.map(function (place) {
-                        stations.push({
-                            value: place.id,
-                            label: place.name
-                        });
-                    });
-                    dispatch(receiveStations(stations));
-                })
-                .catch(function (err) {
-                    console.log(err);
-                });
+  return (dispatch) => {
+    what === 'from' ? dispatch(queryFromStations()) : dispatch(queryToStations());
+    // You can do async stuff here!
+    // API fetching, Animations,...
+    // For more information as to how and why you would do this, check https://github.com/gaearon/redux-thunk
+    return getJson(api_url + '/places?q=' + query + '&type[]=stop_area')
+      .then(function (data) {
+        const stations = new Array();
+        data.places.map(function (place) {
+          stations.push({
+            value: place.id,
+            label: place.name
+          });
+        });
+        dispatch(receiveStations(stations));
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
 
-    };
+  };
 }
 
-export function asyncGetJourneys(fromStation,toStation) {
-    return (dispatch) => {
-        dispatch(queryJourneys());
-        // You can do async stuff here!
-        // API fetching, Animations,...
-        // For more information as to how and why you would do this, check https://github.com/gaearon/redux-thunk
-        const dateTime = moment.tz('Europe/Paris').format('YYYYMMDDThhmmss');
-        return getJson(api_url + '/journeys?from=' + fromStation + '&to=' + toStation + '&datetime=' + dateTime)
-            .then(function (data) {
-                dispatch(receiveJourneys(data));
-            })
-            .catch(function (err) {
-                console.log(err);
-            });
+export function saveResultsToLocal(from, to, results) {
+  return () => {
+    console.log('put into offline db', from, to);
+    db.results.put({
+      from_to: from.value + '_' + to.value,
+      from: from,
+      to: to,
+      journeys: results,
+      lastUpdated: moment.tz('Europe/Paris').format('YYYYMMDDThhmmss')
+    });
+  };
+}
 
-    };
+export function asyncGetJourneys(fromStation, toStation) {
+  return (dispatch) => {
+    dispatch(queryJourneys());
+    if (navigator.onLine && db) {
+      const dateTime = moment.tz('Europe/Paris').format('YYYYMMDDThhmmss');
+      return getJson(api_url + '/journeys?from=' + fromStation.value + '&to=' + toStation.value + '&datetime=' + dateTime)
+        .then(function (data) {
+          dispatch(saveResultsToLocal(fromStation, toStation, data));
+          const output = {
+            journeys: data,
+            lastUpdate: dateTime
+          };
+          dispatch(receiveJourneys(output));
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+    } else {
+      db.results
+        .where('from_to').equals(fromStation.value + '_'+ toStation.value)
+        .first()
+        .then((results) => {
+          if(!results.journeys.length) {
+            throw Error('No results available in the IndexedDB');
+          }
+
+
+        })
+    }
+
+
+  };
 }
 
 export function queryJourneys() {
-    return {type: QUERY_JOURNEYS};
+  return {type: QUERY_JOURNEYS};
 }
 
-export function receiveJourneys(journeys) {
-    return {type: RECEIVE_JOURNEYS, journeys};
+export function receiveJourneys(data) {
+  return {type: RECEIVE_JOURNEYS, data};
 }
 
 export function queryFromStations() {
-    return {type: QUERY_FROM_STATIONS};
+  return {type: QUERY_FROM_STATIONS};
 }
 
 export function queryToStations() {
-    return {type: QUERY_TO_STATIONS};
+  return {type: QUERY_TO_STATIONS};
 }
 
 export function receiveStations(stations) {
-    return {type: RECEIVE_STATIONS, stations};
+  return {type: RECEIVE_STATIONS, stations};
 }
 
 export function setFromStation(station) {
-    return {type: SET_FROM_STATION, station};
+  return {type: SET_FROM_STATION, station};
 }
 
 export function setToStation(station) {
-    return {type: SET_TO_STATION, station};
+  return {type: SET_TO_STATION, station};
 }
 
 export function setStationError(error) {
-    return {type: SET_STATION_ERROR, error};
+  return {type: SET_STATION_ERROR, error};
 }
