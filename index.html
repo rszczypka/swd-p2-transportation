@@ -1,18 +1,1 @@
-<!doctype html>
-<html lang="en" manifest="manifest.appcache">
-	<head>
-		<meta charset="utf-8">
-    	<meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="manifest" href="manifest.json">
-        <meta name="mobile-web-app-capable" content="yes">
-        <link rel="icon" sizes="124x124" href="favicon.png">
-		<title>SNCF voyageurs - Discover France</title>
-	</head>
-	<body>
-		<!-- The app hooks into this div -->
-		<div id="app"></div>
-		<!-- Montserrat -->
-		<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-		<!-- Due to the way webpack works, a lot of magic happens in this file. HtmlWebpackPlugin automatically includes all assets (e.g. bundle.js, main.css) with the correct HTML tags, which is why they are missing in this HTML file. Check out webpackconfig.js if you want to know more. -->
-	</body>
-</html>
+<!DOCTYPE html><html lang="en" manifest="manifest.appcache"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="manifest" href="manifest.json"><meta name="mobile-web-app-capable" content="yes"><link rel="icon" sizes="124x124" href="favicon.png"><title>SNCF voyageurs - Discover France</title><link href="css/main.css" rel="stylesheet"></head><body><div id="app"></div><link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet"><script src="js/bundle.js"></script></body></html>
