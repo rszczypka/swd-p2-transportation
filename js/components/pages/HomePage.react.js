@@ -9,8 +9,7 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import Journeys from '../Journeys.react';
 import {
-    asyncGetFromStations,
-    asyncGetToStations,
+    asyncGetStations,
     asyncGetJourneys,
     setFromStation,
     setToStation,
@@ -56,7 +55,7 @@ class HomePage extends Component {
 
     render() {
         const dispatch = this.props.dispatch;
-        const {fromStations, toStations, toStationsIsLoading, fromStationsIsLoading, fromStation, toStation, stationError} = this.props.data;
+        const {stations, toStationsIsLoading, fromStationsIsLoading, fromStation, toStation, stationError} = this.props.data;
 
         return (
             <div>
@@ -84,7 +83,7 @@ class HomePage extends Component {
                                         required
                                         matchProp="label"
                                         isLoading={ fromStationsIsLoading }
-                                        loadOptions={ (input) => { return dispatch(asyncGetFromStations(input)).then(() => { return { options: fromStations }; }) } }
+                                        loadOptions={ (input) => { return dispatch(asyncGetStations(input,'from')).then(() => { return { options: stations }; }) } }
                                         minimumInput={2}
                                         searchPromptText="Start typing the name of your FROM station"
                                         onChange={(selectValue) => this.handleFromChange(selectValue)}
@@ -101,7 +100,7 @@ class HomePage extends Component {
                                         required
                                         matchProp="label"
                                         isLoading={ toStationsIsLoading }
-                                        loadOptions={ (input) => { return dispatch(asyncGetToStations(input)).then(() => { return { options: toStations }; }) } }
+                                        loadOptions={ (input) => { return dispatch(asyncGetStations(input,'to')).then(() => { return { options: stations }; }) } }
                                         minimumInput={2}
                                         searchPromptText="Start typing the name of your TO station"
                                         onChange={(selectValue) => this.handleToChange(selectValue)}
