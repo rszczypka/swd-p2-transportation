@@ -42,7 +42,10 @@ import Dexie from 'dexie';
 import {getJson} from '../utils/getJson';
 import moment from 'moment';
 import 'moment-timezone';
-const api_url = 'https://api.sncf.com/v1/coverage/sncf';
+const apiKey = '9472ec7628659c5b085726f47f2f0dde';
+const appId = 'a9fcc47e';
+const apiUrl = 'https://transportapi.com/v3/uk/';
+//const apiUrl = 'https://api.sncf.com/v1/coverage/sncf';
 const db = new Dexie('SNCFApp');
 
 db.version(1).stores({
@@ -56,12 +59,12 @@ export function asyncGetFromStations(query) {
     dispatch(queryFromStations());
 
     if(navigator.onLine && db) {
-      return getJson(api_url + '/places?q=' + query + '&type[]=stop_area')
+      return getJson(apiUrl + 'places.json?query=' + query + '&type=train_station' + '&api_key=' + apiKey + '&app_id=' + appId)
         .then(function (data) {
           const stations = new Array();
           data.places.map(function (place) {
             stations.push({
-              value: place.id,
+              value: place.tiploc_code,
               label: place.name
             });
           });
@@ -89,12 +92,12 @@ export function asyncGetToStations(query) {
     dispatch(queryToStations());
 
     if(navigator.onLine && db) {
-      return getJson(api_url + '/places?q=' + query + '&type[]=stop_area')
+      return getJson(apiUrl + 'places?query=' + query + '&type=train_station' + '&api_key=' + apiKey + '&app_id=' + appId)
         .then(function (data) {
           const stations = new Array();
           data.places.map(function (place) {
             stations.push({
-              value: place.id,
+              value: place.tiploc_code,
               label: place.name
             });
           });
@@ -137,7 +140,7 @@ export function asyncGetJourneys(fromStation, toStation) {
     dispatch(queryJourneys());
     if (navigator.onLine && db) {
       const dateTime = moment.tz('Europe/Paris').format('YYYYMMDDThhmmss');
-      return getJson(api_url + '/journeys?from=' + fromStation.value + '&to=' + toStation.value + '&datetime=' + dateTime)
+      return getJson(apiUrl + '/journeys?from=' + fromStation.value + '&to=' + toStation.value + '&datetime=' + dateTime)
         .then(function (data) {
           dispatch(saveResultsToLocal(fromStation, toStation, data));
           const output = {
