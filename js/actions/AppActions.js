@@ -30,7 +30,8 @@
 import {
   QUERY_FROM_STATIONS,
   QUERY_TO_STATIONS,
-  RECEIVE_STATIONS,
+  RECEIVE_FROM_STATIONS,
+  RECEIVE_TO_STATIONS,
   SET_FROM_STATION,
   SET_TO_STATION,
   QUERY_JOURNEYS,
@@ -50,26 +51,70 @@ db.version(1).stores({
 
 db.open();
 
-export function asyncGetStations(query, what) {
+export function asyncGetFromStations(query) {
   return (dispatch) => {
-    what === 'from' ? dispatch(queryFromStations()) : dispatch(queryToStations());
-    // You can do async stuff here!
-    // API fetching, Animations,...
-    // For more information as to how and why you would do this, check https://github.com/gaearon/redux-thunk
-    return getJson(api_url + '/places?q=' + query + '&type[]=stop_area')
-      .then(function (data) {
-        const stations = new Array();
-        data.places.map(function (place) {
-          stations.push({
-            value: place.id,
-            label: place.name
+    dispatch(queryFromStations());
+
+    if(navigator.onLine && db) {
+      return getJson(api_url + '/places?q=' + query + '&type[]=stop_area')
+        .then(function (data) {
+          const stations = new Array();
+          data.places.map(function (place) {
+            stations.push({
+              value: place.id,
+              label: place.name
+            });
           });
+          dispatch(receiveFromStations(stations));
+        })
+        .catch(function (err) {
+          console.log(err);
         });
-        dispatch(receiveStations(stations));
+    } else {
+      db.results.toArray().then((results) => {
+        const unique = _.map(_.indexBy(results, 'from.value'), (obj) => {
+          return obj;
+        });
+
+        return dispatch(receiveFromStations(unique));
       })
-      .catch(function (err) {
-        console.log(err);
-      });
+    }
+
+
+  };
+}
+
+export function asyncGetToStations(query) {
+  return (dispatch) => {
+    dispatch(queryToStations());
+
+    if(navigator.onLine && db) {
+      return getJson(api_url + '/places?q=' + query + '&type[]=stop_area')
+        .then(function (data) {
+          const stations = new Array();
+          data.places.map(function (place) {
+            stations.push({
+              value: place.id,
+              label: place.name
+            });
+          });
+          dispatch(receiveToStations(stations));
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+    } else {
+      db.results
+        .where('from_to').startsWith(query + '_')
+        .toArray().then((results) => {
+        const unique = _.map(_.indexBy(results, 'from.value'), (obj) => {
+          return obj;
+        });
+
+        return dispatch(receiveToStations(unique));
+      })
+    }
+
 
   };
 }
@@ -137,8 +182,12 @@ export function queryToStations() {
   return {type: QUERY_TO_STATIONS};
 }
 
-export function receiveStations(stations) {
-  return {type: RECEIVE_STATIONS, stations};
+export function receiveFromStations(stations) {
+  return {type: RECEIVE_FROM_STATIONS, stations};
+}
+
+export function receiveToStations(stations) {
+  return {type: RECEIVE_TO_STATIONS, stations};
 }
 
 export function setFromStation(station) {
