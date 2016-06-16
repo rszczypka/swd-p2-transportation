@@ -5,7 +5,7 @@
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Async} from 'react-select';
+import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import Journeys from '../Journeys.react';
 import {
@@ -78,7 +78,7 @@ class HomePage extends Component {
                           <div className="col-sm-6">
                               <div className="form-group">
                                   <label htmlFor="departure">From</label>
-                                  <Async
+                                  <Select.Async
                                     name="departure"
                                     id="departure"
                                     required
@@ -95,7 +95,7 @@ class HomePage extends Component {
                           <div className="col-sm-6">
                               <div className="form-group">
                                   <label htmlFor="arrival">To</label>
-                                  <Async
+                                  <Select.Async
                                     name="arrival"
                                     id="arrival"
                                     required

@@ -58,6 +58,7 @@ export function asyncGetFromStations(query) {
     if(navigator.onLine && db) {
       return getJson(api_url + '/places?q=' + query + '&type[]=stop_area')
         .then(function (data) {
+          console.log(data);
           const stations = new Array();
           data.places.map(function (place) {
             stations.push({

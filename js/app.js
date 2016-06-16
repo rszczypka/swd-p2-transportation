@@ -56,7 +56,6 @@ import '../css/main.css';
 
 // Create the store with the redux-thunk middleware, which allows us
 // to do asynchronous things in the actions
-import { asyncGetFromStations } from './actions/AppActions';
 import rootReducer from './reducers/rootReducer';
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 const store = createStoreWithMiddleware(rootReducer);
@@ -68,8 +67,6 @@ if (module.hot) {
     store.replaceReducer(nextRootReducer);
   });
 }
-
-//store.dispatch(asyncGetFromStations('a'));
 
 // Mostly boilerplate, except for the Routes. These are the pages you can go to,
 // which are all wrapped in the App component, which contains the navigation etc

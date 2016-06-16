@@ -16,7 +16,8 @@
 import {
     QUERY_FROM_STATIONS,
     QUERY_TO_STATIONS,
-    RECEIVE_STATIONS,
+    RECEIVE_FROM_STATIONS,
+    RECEIVE_TO_STATIONS,
     SET_FROM_STATION,
     SET_TO_STATION,
     QUERY_JOURNEYS,
@@ -27,7 +28,8 @@ import assignToEmpty from '../utils/assign';
 import {modeled} from 'react-redux-form';
 
 const initialState = {
-    stations: [],
+    fromStations: [],
+    toStations: [],
     fromStationsIsLoading: false,
     toStationsIsLoading: false,
     fromStation: {},
@@ -57,9 +59,15 @@ function homeReducer(state = initialState, action) {
             return assignToEmpty(state, {
                 toStationsIsLoading: true
             });
-        case RECEIVE_STATIONS:
+        case RECEIVE_FROM_STATIONS:
             return assignToEmpty(state, {
-                stations: action.stations,
+                fromStations: action.stations,
+                fromStationsIsLoading: false,
+                toStationsIsLoading: false
+            });
+        case RECEIVE_TO_STATIONS:
+            return assignToEmpty(state, {
+                toStations: action.stations,
                 fromStationsIsLoading: false,
                 toStationsIsLoading: false
             });
@@ -86,7 +94,9 @@ function homeReducer(state = initialState, action) {
             });
         case SET_STATION_ERROR:
             return assignToEmpty(state, {
-                stationError: action.error
+                stationError: action.error,
+                fromStationsIsLoading: false,
+                toStationsIsLoading: false
             });
         default:
             return state;
