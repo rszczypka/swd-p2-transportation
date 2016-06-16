@@ -54,12 +54,12 @@ db.open();
 export function asyncGetFromStations(query) {
   return (dispatch) => {
     dispatch(queryFromStations());
+    let stations = new Array();
 
     if(navigator.onLine && db) {
       return getJson(api_url + '/places?q=' + query + '&type[]=stop_area')
         .then(function (data) {
           console.log(data);
-          const stations = new Array();
           data.places.map(function (place) {
             stations.push({
               value: place.id,
@@ -72,12 +72,15 @@ export function asyncGetFromStations(query) {
           console.log(err);
         });
     } else {
-      db.results.toArray().then((results) => {
-        const unique = _.map(_.indexBy(results, 'from.value'), (obj) => {
-          return obj;
+      return db.results.toArray().then((results) => {
+        results.map(function (place) {
+          stations.push({
+            value: place.from.value,
+            label: place.from.label
+          });
         });
 
-        return dispatch(receiveFromStations(unique));
+        return dispatch(receiveFromStations(stations));
       })
     }
 
@@ -86,13 +89,17 @@ export function asyncGetFromStations(query) {
 }
 
 export function asyncGetToStations(query) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState();
     dispatch(queryToStations());
+
+
+    const stations = new Array();
 
     if(navigator.onLine && db) {
       return getJson(api_url + '/places?q=' + query + '&type[]=stop_area')
         .then(function (data) {
-          const stations = new Array();
+
           data.places.map(function (place) {
             stations.push({
               value: place.id,
@@ -105,14 +112,18 @@ export function asyncGetToStations(query) {
           console.log(err);
         });
     } else {
-      db.results
-        .where('from_to').startsWith(query + '_')
+      return db.results
+        .where('from_to').startsWith(state.fromStation.value + '_')
         .toArray().then((results) => {
-        const unique = _.map(_.indexBy(results, 'from.value'), (obj) => {
-          return obj;
-        });
+          results.map(function (place) {
+            stations.push({
+              value: place.to.value,
+              label: place.to.label
+            });
+          });
+          console.log(stations);
 
-        return dispatch(receiveToStations(unique));
+        return dispatch(receiveToStations(stations));
       })
     }
 
@@ -136,8 +147,8 @@ export function saveResultsToLocal(from, to, results) {
 export function asyncGetJourneys(fromStation, toStation) {
   return (dispatch) => {
     dispatch(queryJourneys());
+
     if (navigator.onLine && db) {
-      const dateTime = moment.tz('Europe/Paris').format('YYYYMMDDThhmmss');
       return getJson(api_url + '/journeys?from=' + fromStation.value + '&to=' + toStation.value + '&datetime=' + dateTime)
         .then(function (data) {
           dispatch(saveResultsToLocal(fromStation, toStation, data));
@@ -151,14 +162,20 @@ export function asyncGetJourneys(fromStation, toStation) {
           console.log(err);
         });
     } else {
-      db.results
+      return db.results
         .where('from_to').equals(fromStation.value + '_'+ toStation.value)
         .first()
         .then((results) => {
-          if(!results.journeys.length) {
+          if(!results.journeys.journeys.length) {
             throw Error('No results available in the IndexedDB');
           }
 
+          const output = {
+            journeys: results.journeys,
+            lastUpdate: results.lastUpdated
+          };
+
+          dispatch(receiveJourneys(output));
 
         })
     }

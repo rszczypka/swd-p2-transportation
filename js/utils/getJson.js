@@ -33,7 +33,7 @@ export const get = (url) => {
   });
 }
 
-export const getJsonP = (url) => {
+export const getJson = (url) => {
   return get(url).then(JSON.parse).catch(function(err) {
     console.log("getJSON failed for", url, err);
     throw err;
