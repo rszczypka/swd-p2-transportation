@@ -55,11 +55,11 @@ export function asyncGetFromStations(query) {
   return (dispatch) => {
     dispatch(queryFromStations());
     let stations = new Array();
+    console.log(query);
 
     if(navigator.onLine && db) {
       return getJson(api_url + '/places?q=' + query + '&type[]=stop_area')
         .then(function (data) {
-          console.log(data);
           data.places.map(function (place) {
             stations.push({
               value: place.id,
@@ -92,7 +92,7 @@ export function asyncGetToStations(query) {
   return (dispatch, getState) => {
     const state = getState();
     dispatch(queryToStations());
-
+    console.log(query);
 
     const stations = new Array();
 
@@ -121,7 +121,6 @@ export function asyncGetToStations(query) {
               label: place.to.label
             });
           });
-          console.log(stations);
 
         return dispatch(receiveToStations(stations));
       })
@@ -149,6 +148,7 @@ export function asyncGetJourneys(fromStation, toStation) {
     dispatch(queryJourneys());
 
     if (navigator.onLine && db) {
+      const dateTime = moment.tz('Europe/Paris').format('YYYYMMDDThhmmss');
       return getJson(api_url + '/journeys?from=' + fromStation.value + '&to=' + toStation.value + '&datetime=' + dateTime)
         .then(function (data) {
           dispatch(saveResultsToLocal(fromStation, toStation, data));
