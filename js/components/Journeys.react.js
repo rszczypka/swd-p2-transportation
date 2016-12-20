@@ -5,6 +5,7 @@ import moment from 'moment';
 import 'moment-duration-format';
 import {Panel, PanelGroup} from 'react-bootstrap';
 import _ from 'lodash';
+import Map from '../../img/carte_grande.jpg';
 
 class Journeys extends Component {
 
@@ -129,12 +130,20 @@ class Journeys extends Component {
 
 
 
-        if (journey_info) {
+        if (!_.isEmpty(journey_info)) {
+            console.log('journey_info');
             display_journey = (
                 <div>
                     <PanelGroup accordion>
                         { journey_info }
                     </PanelGroup>
+                </div>
+            );
+        } else {
+            display_journey = (
+                <div className="text-center">
+                    <h4 className="text-center">Explore France by train! Visit over 230 cities across France with TGV. Head to Lyon, Avignon, Strasbourg, Bordeaux, Rennes and many other destinations.</h4>
+                    <img className="map" src={Map} />
                 </div>
             );
         }
@@ -189,6 +198,7 @@ class Journeys extends Component {
                 </div>
             );
         }
+
         return false;
 
     }

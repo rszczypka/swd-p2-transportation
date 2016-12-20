@@ -1,7 +1,7 @@
 /*This file contains all styles related to the header of the site/application.*/
 .header {
     background-color: $light-brand-color;
-    background-image: linear-gradient(rgba($light-brand-color,0.9),rgba($light-brand-color,0.9)), resolve('railway-station-france.jpg');
+    background-image: linear-gradient(rgba($light-brand-color,0.9),rgba($light-brand-color,0.9));
     background-repeat: no-repeat;
     background-position: center 0,left center;
     background-size: cover;

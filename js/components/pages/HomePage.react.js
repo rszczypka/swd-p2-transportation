@@ -5,7 +5,7 @@
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Select from 'react-select';
+import Select, {Async} from 'react-select';
 import 'react-select/dist/react-select.css';
 import Journeys from '../Journeys.react';
 import {
@@ -78,13 +78,13 @@ class HomePage extends Component {
                           <div className="col-sm-6">
                               <div className="form-group">
                                   <label htmlFor="departure">From</label>
-                                  <Select.Async
+                                  <Async
                                     name="departure"
                                     id="departure"
                                     required
                                     matchProp="label"
                                     isLoading={ fromStationsIsLoading }
-                                    loadOptions={ (input) => { return dispatch(asyncGetFromStations(input)).then(() => { return { options: fromStations }; }) } }
+                                    loadOptions={ (input) => { if(input) return dispatch(asyncGetFromStations(input)).then(() => { return { options: fromStations }; }) } }
                                     minimumInput={2}
                                     searchPromptText="Start typing the name of your FROM station"
                                     onChange={(selectValue) => this.handleFromChange(selectValue)}
@@ -95,13 +95,13 @@ class HomePage extends Component {
                           <div className="col-sm-6">
                               <div className="form-group">
                                   <label htmlFor="arrival">To</label>
-                                  <Select.Async
+                                  <Async
                                     name="arrival"
                                     id="arrival"
                                     required
                                     matchProp="label"
                                     isLoading={ toStationsIsLoading }
-                                    loadOptions={ (input) => { return dispatch(asyncGetToStations(input)).then(() => { return { options: toStations }; }) } }
+                                    loadOptions={ (input) => { if(input) return dispatch(asyncGetToStations(input)).then(() => { return { options: toStations }; }) } }
                                     minimumInput={2}
                                     searchPromptText="Start typing the name of your TO station"
                                     onChange={(selectValue) => this.handleToChange(selectValue)}

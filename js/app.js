@@ -7,20 +7,14 @@
  *
  */
 
-// Load the ServiceWorker, the Cache polyfill, the manifest.json file and the .htaccess file
-import 'file?name=[name].[ext]!../serviceworker.js';
-import 'file?name=[name].[ext]!../manifest.json';
+// Load the ServiceWorker, the Cache polyfill, file and the .htaccess file
+import 'file?name=[name].[ext]!../sw.js';
+import 'file?name=[name].[ext]!../favicon.png';
 import 'file?name=[name].[ext]!../.htaccess';
+import runtime from 'serviceworker-webpack-plugin/lib/runtime';
 
-// Check for ServiceWorker support before trying to install it
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/serviceworker.js').then(() => {
-    // Registration was successful
-  }).catch(() => {
-    // Registration failed
-  });
-} else {
-  // No ServiceWorker Support
+  const registration = runtime.register();
 }
 
 // Import all the third party stuff
@@ -30,20 +24,9 @@ import { Provider } from 'react-redux';
 import { Router, Route } from 'react-router';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import FontFaceObserver from 'fontfaceobserver';
 import createHistory from 'history/lib/createBrowserHistory';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap-loader';
-
-// Observer loading of Montserrat (to remove Montserrat, remove the <link> tag in the index.html file and this observer)
-const openSansObserver = new FontFaceObserver('Montserrat', {});
-
-// When Montserrat is loaded, add the js-montserrat-loaded class to the body
-openSansObserver.check().then(() => {
-  document.body.classList.add('js-montserrat-loaded');
-}, () => {
-  document.body.classList.remove('js-montserrat-loaded');
-});
 
 // Import the pages
 import HomePage from './components/pages/HomePage.react';

@@ -42,6 +42,7 @@ import Dexie from 'dexie';
 import {getJson} from '../utils/getJson';
 import moment from 'moment';
 import 'moment-timezone';
+import uniqBy from 'lodash/uniqBy';
 const api_url = 'https://api.sncf.com/v1/coverage/sncf';
 const db = new Dexie('SNCFApp');
 
@@ -57,7 +58,6 @@ export function asyncGetFromStations(query) {
     let stations = new Array();
     console.log(query);
 
-    if(navigator.onLine && db) {
       return getJson(api_url + '/places?q=' + query + '&type[]=stop_area')
         .then(function (data) {
           data.places.map(function (place) {
@@ -68,24 +68,22 @@ export function asyncGetFromStations(query) {
           });
           dispatch(receiveFromStations(stations));
         })
-        .catch(function (err) {
-          console.log(err);
-        });
-    } else {
-      return db.results.toArray().then((results) => {
-        results.map(function (place) {
-          stations.push({
-            value: place.from.value,
-            label: place.from.label
-          });
-        });
+        .catch(function () {
+          db.results.toArray().then((results) => {
+            results.map(function (place) {
+              stations.push({
+                value: place.from.value,
+                label: place.from.label
+              });
+            });
 
-        return dispatch(receiveFromStations(stations));
-      })
+            stations = uniqBy(stations, 'value');
+            console.log(stations);
+
+            dispatch(receiveFromStations(stations));
+          })
+        });
     }
-
-
-  };
 }
 
 export function asyncGetToStations(query) {
@@ -94,10 +92,9 @@ export function asyncGetToStations(query) {
     dispatch(queryToStations());
     console.log(query);
 
-    const stations = new Array();
+    let stations = new Array();
 
-    if(navigator.onLine && db) {
-      return getJson(api_url + '/places?q=' + query + '&type[]=stop_area')
+    return getJson(api_url + '/places?q=' + query + '&type[]=stop_area')
         .then(function (data) {
 
           data.places.map(function (place) {
@@ -108,26 +105,23 @@ export function asyncGetToStations(query) {
           });
           dispatch(receiveToStations(stations));
         })
-        .catch(function (err) {
-          console.log(err);
-        });
-    } else {
-      return db.results
-        .where('from_to').startsWith(state.fromStation.value + '_')
-        .toArray().then((results) => {
-          results.map(function (place) {
-            stations.push({
-              value: place.to.value,
-              label: place.to.label
+        .catch(function () {
+          db.results
+              .where('from_to').startsWith(state.fromStation.value + '_')
+              .toArray().then((results) => {
+            results.map(function (place) {
+              stations.push({
+                value: place.to.value,
+                label: place.to.label
+              });
             });
+
+            stations = uniqBy(stations, 'value');
+
+            return dispatch(receiveToStations(stations));
           });
-
-        return dispatch(receiveToStations(stations));
-      })
-    }
-
-
-  };
+        });
+  }
 }
 
 export function saveResultsToLocal(from, to, results) {

@@ -19,6 +19,7 @@ export default class ReadmePage extends Component {
 
           <h3>Attributions</h3>
           <ul>
+              <li><a href="http://tgv.en.voyages-sncf.com/en/">TGV destinations in France map</a></li>
               <li>A solid starting point achieved with <a href="https://github.com/mxstbr/react-boilerplate">react-boilerplate</a></li>
               <li><a href="https://data.sncf.com/api/en">SNCF API</a></li>
               <li><a href="http://www.freepik.com/free-photos-vectors/logo">Logo vector designed by Freepik</a></li>
